@@ -51,11 +51,9 @@ function init() {
   }
 }
 
-$(".container").on("click", function(event){
+$(".container").on("click", "div.col-2", function(event){
     
-   if(event.target.matches("div")) {
-    console.log(event.target.getAttribute("class"));
-   }
+  console.log($(this).prev().children().val());
 
    
 });
