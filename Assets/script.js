@@ -1,62 +1,90 @@
-$(document).ready(function() {
-function init() {
-  var today = new Date();
-  var currentHour = today.getHours();
-  //moment() gives us the current date. format() formats the date in required pattern. 
-  var formattedDate = moment().format('dddd MMMM Do');
-  $("#currentDay").text(formattedDate);
 
-  //for testing changed to 23, original value 18
-  for (i = 9; i < 23; i++) {
-    var rowDiv = $("<div>");
-    rowDiv.attr("class", "row");
 
-    var colHrDiv = $("<div>");
-    colHrDiv.attr("class", "col-2 hour");
-    //if i >=12 then set PM instead of AM
-    if (i < 12) {
-      colHrDiv.text(i + "AM");
-    } else if (i === 12) {
-      colHrDiv.text(i + "PM");
-    } else if (i > 12) {
-      colHrDiv.text(i - 12 + "PM");
+$(document).ready(function () {
+  function init() {
+    for (i = 9; i < 18; i++) {
+      // set current date & time on top of the calender
+      var time = moment().format("dddd MMMM Do");
+      console.log(time);
+      $("#currentDay").text(time);
+
+      // create row inside div
+      var rowDiv = $("<div>");
+      rowDiv.attr("class", "row");
+
+      //create colum inside div - time colum
+      var colHrDiv = $("<div>");
+      colHrDiv.attr("class", "col-2 hour");
+      if (i < 12) {
+        colHrDiv.text(i + "AM");
+      } else if (i === 12) {
+        colHrDiv.text(i + "PM");
+      } else if (i > 12) {
+        colHrDiv.text(i - 12 + "PM");
+      }
+
+      //create colum inside div - text colum
+      var colTxDiv = $("<div>");
+
+      var todayDate = new Date();
+      var currentHour = todayDate.getHours();
+
+      if(i === currentHour){
+        colTxDiv.attr("class", "col-8 present");
+      }else if(i<currentHour){
+        colTxDiv.attr("class", "col-8 past");
+
+      }else if(i>currentHour){
+        colTxDiv.attr("class", "col-8 future");
+
+      }
+
+      var textDiv = $("<textarea>");
+      textDiv.attr("rows", "2");
+      textDiv.attr("cols", "80");
+      textDiv.attr("id", i);
+      var receivedValFromLC = localStorage.getItem(i);
+      textDiv.val(receivedValFromLC);
+
+
+      colTxDiv.append(textDiv);
+
+      //create colum inside div -  save colum
+      var colSaveDiv = $("<div>");
+      colSaveDiv.attr("class", "col-2 time-block saveBtn");
+      colSaveDiv.attr("textAreaId", i);
+
+
+      var imgInsideColSaveDiv = $("<img>");
+      imgInsideColSaveDiv.attr("src", "./Assets/images/lockimage.png");
+      imgInsideColSaveDiv.attr("width", "60");
+      imgInsideColSaveDiv.attr("height", "60");
+      imgInsideColSaveDiv.attr("alt", "lock");
+
+      colSaveDiv.append(imgInsideColSaveDiv);
+
+      //append all the colum in the row and finally the row in the container
+      rowDiv.append(colHrDiv, colTxDiv, colSaveDiv);
+      $(".container").append(rowDiv);
     }
- 
-    var colTextDiv = $("<div>");
-    if (i === currentHour) {
-      colTextDiv.attr("class", "col-8 present");
-    } else if (i < currentHour) {
-      colTextDiv.attr("class", "col-8 past");
-    } else if (i > currentHour) {
-      colTextDiv.attr("class", "col-8 future");
-    }
-    var textAreaEl = $("<textarea>");
-    textAreaEl.attr("rows", "2");
-    textAreaEl.attr("cols", "80");
-    colTextDiv.append(textAreaEl);
-
-    var colSaveDiv = $("<div>");
-    colSaveDiv.attr("class", "col-2 time-block saveBtn");
-    colSaveDiv.attr("id", "testBtn"+ i);
-
-    var colImageEl = $("<img>");
-    colImageEl.attr("src", "./Assets/images/lockimage.png");
-    colImageEl.attr("width", "60");
-    colImageEl.attr("height", "60");
-    colImageEl.attr("alt", "lock");
-    colSaveDiv.append(colImageEl);
-
-    rowDiv.append(colHrDiv, colTextDiv, colSaveDiv);
-    $(".container").append(rowDiv);
   }
-}
+  //function call
+  init();
 
-$(".container").on("click", "div.col-2", function(event){
-    
-  console.log($(this).prev().children().val());
+  // on-click event to save button div
+  // fetching the value and storing it in a variable.
+  //saving it to local storage
 
-   
-});
+  $(".saveBtn").on("click", function () {
 
-init();
+     var textAreaId = $(this).attr("textAreaId");
+     var textAreaValue = ($("#" + textAreaId).val());
+
+     localStorage.setItem(textAreaId, textAreaValue );
+    //  console.log(localStorage.getItem(textAreaId));
+
+
+
+
+  });
 });
