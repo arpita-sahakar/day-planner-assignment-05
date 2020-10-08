@@ -5,7 +5,7 @@ This simple website allows users to plan a particular work day. The site is resp
 The time of the day is color coded, i.e
 - Grey for hours passed.
 - Red for the current hour.
-- Green for the future hour.
+- Green for the future hours.
 
 Users can assign ToDo tasks during the work hours. The tasks are also stored in Local Storage so that the data is not lost on refresh or when the browser is closed.
 
